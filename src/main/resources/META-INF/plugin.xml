@@ -1,17 +1,13 @@
 <idea-plugin>
 
-    <id>org.jetbrains</id>
-    <name>my_plugin</name>
-    <version>0.0.1</version>
-    <vendor email="dummy" url="dummy">dummy</vendor>
+    <id>akunevich.pullrequest</id>
+    <name>Pull Request</name>
+    <version>0.1</version>
+    <vendor email="aliaksandr.akunevich@gmail.com">Alex Akunevich</vendor>
 
-    <description><![CDATA[
-      Sample plugin.<br>
-    ]]></description>
+    <description></description>
 
-    <change-notes><![CDATA[
-      Release 0.0.1: Initial release.<br>
-    ]]>
+    <change-notes>
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
@@ -24,6 +20,14 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="MyToolWindow" anchor="right" factoryClass="akunevich.pullrequest.HelloToolWindow"/>
+
+        <projectConfigurable groupId="tools" displayName="Pull Request Plugin"
+                             id="preferences.PullRequestPluginConfigurable"
+                             instance="akunevich.pullrequest.settings.PullRequestConfigurable"/>
+        <projectService serviceInterface="akunevich.pullrequest.settings.Settings"
+                        serviceImplementation="akunevich.pullrequest.settings.Settings"/>
+
     </extensions>
 
     <actions>
