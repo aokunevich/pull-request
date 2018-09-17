@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 @State(name = "PullRequestSettings")
 public class Settings implements PersistentStateComponent<Settings> {
 
+    // private Boolean on;
+
     private String url;
     private String username;
     private String password;
