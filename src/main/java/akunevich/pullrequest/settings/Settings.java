@@ -50,5 +50,11 @@ public class Settings implements PersistentStateComponent<Settings> {
         XmlSerializerUtil.copyBean(state, this);
     }
 
-
+    @Override
+    public String toString() {
+        return "Settings{" +
+                "url='" + url + '\'' +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

@@ -57,10 +57,16 @@ public class Main implements ProjectComponent {
         settings.loadState(ServiceManager.getService(project, Settings.class));
 
 
-        BitBucket bitBucket = new BitBucket();
-        PullRequests pullRequests = bitBucket.list(settings.getUrl(), settings.getUsername(), settings.getPassword());
+        List<PullRequest> result = new ArrayList<>();
 
-        return pullRequests.getValues();
+        if (settings.getUrl() == null || settings.getUsername() == null || settings.getPassword() == null) {
+            System.out.println(settings);
+        } else {
+            BitBucket bitBucket = new BitBucket();
+            PullRequests pullRequests = bitBucket.list(settings.getUrl(), settings.getUsername(), settings.getPassword());
+            result.addAll(pullRequests.getValues());
+        }
+        return result;
     }
 
 
