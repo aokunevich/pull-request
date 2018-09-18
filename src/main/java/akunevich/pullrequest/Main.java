@@ -7,7 +7,6 @@ import akunevich.pullrequest.settings.Settings;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -45,6 +44,7 @@ public class Main implements ProjectComponent {
 
     private void doProcess() {
         logger.debug("Processing...");
+/*
 
         List<PullRequest> loadedPullRequests = loadPullRequests();
 
@@ -64,6 +64,12 @@ public class Main implements ProjectComponent {
 
             logger.info("Project: " + project.getName() + ". Changes in pull requests were found.");
         }
+*/
+
+        Notifications.Bus.notify(new Notification("Pull Request Plugin",
+                "New pull request was created",
+                "",
+                NotificationType.INFORMATION), project);
 
 
     }
