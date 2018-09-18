@@ -44,7 +44,6 @@ public class Main implements ProjectComponent {
 
     private void doProcess() {
         logger.debug("Processing...");
-/*
 
         List<PullRequest> loadedPullRequests = loadPullRequests();
 
@@ -54,23 +53,13 @@ public class Main implements ProjectComponent {
             pullRequests.clear();
             pullRequests.addAll(loadedPullRequests);
 
-
-            ApplicationManager.getApplication().executeOnPooledThread(() ->
-                    Notifications.Bus.notify(new Notification("Pull Request Plugin",
-                            "New pull request was created",
-                            "",
-                            NotificationType.INFORMATION)));
-
+            Notifications.Bus.notify(new Notification("Pull Request Plugin",
+                    "New pull request was created",
+                    "",
+                    NotificationType.INFORMATION), project);
 
             logger.info("Project: " + project.getName() + ". Changes in pull requests were found.");
         }
-*/
-
-        Notifications.Bus.notify(new Notification("Pull Request Plugin",
-                "New pull request was created",
-                "",
-                NotificationType.INFORMATION), project);
-
 
     }
 
