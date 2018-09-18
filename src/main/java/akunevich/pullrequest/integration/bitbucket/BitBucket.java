@@ -1,14 +1,15 @@
 package akunevich.pullrequest.integration.bitbucket;
 
+import com.google.gson.Gson;
+import com.intellij.openapi.diagnostic.Logger;
 import org.apache.http.client.fluent.Request;
 
 import java.io.IOException;
 import java.util.Base64;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BitBucket {
 
+    private static final Logger logger = Logger.getInstance(BitBucket.class);
 
 
 /*
@@ -86,15 +87,11 @@ public class BitBucket {
     public PullRequests list(String url, String username, String password) {
         PullRequests result = new PullRequests();
 
-/*
         try {
             result = new Gson().fromJson(doList(url, username, password), PullRequests.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
-*/
-
-        result.setValues(Stream.of(new PullRequest()).collect(Collectors.toList()));
 
         return result;
     }
