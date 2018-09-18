@@ -58,9 +58,9 @@ public class Main implements ProjectComponent {
                     "",
                     NotificationType.INFORMATION));
 
+            logger.info("Project: " + project.getName() + ". Changes in pull requests were found.");
         }
 
-        logger.info("Changes in pull requests were found.");
     }
 
     private List<PullRequest> loadPullRequests() {
@@ -70,7 +70,7 @@ public class Main implements ProjectComponent {
         List<PullRequest> result = new ArrayList<>();
 
         if (settings.getUrl() == null || settings.getUsername() == null || settings.getPassword() == null) {
-            logger.warn("Settings are invalid. " + settings);
+            logger.warn("Project: " + project.getName() + ". Settings are invalid. " + settings);
         } else {
             BitBucket bitBucket = new BitBucket();
             PullRequests pullRequests = bitBucket.list(settings.getUrl(), settings.getUsername(), settings.getPassword());
