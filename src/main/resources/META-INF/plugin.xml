@@ -38,4 +38,10 @@
         </group>
     </actions>
 
+    <project-components>
+        <component>
+            <implementation-class>akunevich.pullrequest.Main</implementation-class>
+        </component>
+    </project-components>
+
 </idea-plugin>

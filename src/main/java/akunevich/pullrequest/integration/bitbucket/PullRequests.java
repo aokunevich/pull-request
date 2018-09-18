@@ -2,7 +2,7 @@ package akunevich.pullrequest.integration.bitbucket;
 
 import java.util.List;
 
-public class RepositoryPullRequests {
+public class PullRequests {
 
     private int size;
     private int limit;

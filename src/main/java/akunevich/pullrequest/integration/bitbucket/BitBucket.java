@@ -1,11 +1,11 @@
 package akunevich.pullrequest.integration.bitbucket;
 
-import com.google.gson.Gson;
-import io.reactivex.Flowable;
 import org.apache.http.client.fluent.Request;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BitBucket {
 
@@ -59,6 +59,7 @@ public class BitBucket {
  */
 
 
+/*
     public static void main(String[] args) {
 
         String pullRequests = "/rest/api/1.0/projects/VRTLCRD/repos/vrtlcrd/pull-requests";
@@ -67,11 +68,11 @@ public class BitBucket {
         String password = "";
 
         try {
-           String json = new BitBucket().list(pullRequests, sid, password);
+            String json = new BitBucket().list(pullRequests, sid, password);
 
-           System.out.println(json);
+            System.out.println(json);
 
-           new Gson().fromJson(json, RepositoryPullRequests.class);
+            new Gson().fromJson(json, PullRequests.class);
 
 
         } catch (IOException e) {
@@ -79,13 +80,31 @@ public class BitBucket {
         }
 
     }
+*/
 
-    private String list(String url, String sid, String password) throws IOException {
-       return Request
+
+    public PullRequests list(String url, String username, String password) {
+        PullRequests result = new PullRequests();
+
+/*
+        try {
+            result = new Gson().fromJson(doList(url, username, password), PullRequests.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
+
+        result.setValues(Stream.of(new PullRequest()).collect(Collectors.toList()));
+
+        return result;
+    }
+
+    private String doList(String url, String username, String password) throws IOException {
+        return Request
                 .Get(url)
-                .addHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString((sid + ":" + password).getBytes()))
-        .execute()
-        .returnContent().asString();
+                .addHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes()))
+                .execute()
+                .returnContent().asString();
     }
 }
 

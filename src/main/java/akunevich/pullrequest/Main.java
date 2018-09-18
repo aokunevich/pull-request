@@ -1,50 +1,67 @@
 package akunevich.pullrequest;
 
+import akunevich.pullrequest.integration.bitbucket.BitBucket;
 import akunevich.pullrequest.integration.bitbucket.PullRequest;
+import akunevich.pullrequest.integration.bitbucket.PullRequests;
+import akunevich.pullrequest.settings.Settings;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
+import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class Main {
 
+// todo add 'enabled' to settings
+
+
+public class Main implements ProjectComponent {
 
     private List<PullRequest> pullRequests = new ArrayList<>();
 
-    public void doStart() {
 
-        // todo add 'enabled' to settings
+    private Project project;
 
-        // run after project open
+    public Main(Project project) {
+        this.project = project;
+    }
 
-
-/*
+    @Override
+    public void projectOpened() {
         Executors.newScheduledThreadPool(1)
                 .scheduleAtFixedRate(this::doProcess, 5, 10, TimeUnit.SECONDS);
-*/
-
-
-
-        // ProjectManager.addProjectManagerListener()
-
     }
 
     private void doProcess() {
-        // load settings
-        // load pullrequests
-
-/*
-        List<PullRequest> loadedPullRequests = loadPullRequests(url, username, password);
+        List<PullRequest> loadedPullRequests = loadPullRequests();
 
         if (pullRequests.size() != loadedPullRequests.size()) {
             pullRequests.clear();
             pullRequests.addAll(loadedPullRequests);
 
-            // send notification
-        }
-*/
+            Notifications.Bus.notify(new Notification("Pull Request Plugin",
+                    "New pull request was created",
+                    "",
+                    NotificationType.INFORMATION));
 
+        }
     }
+
+    private List<PullRequest> loadPullRequests() {
+        Settings settings = new Settings();
+        settings.loadState(ServiceManager.getService(project, Settings.class));
+
+
+        BitBucket bitBucket = new BitBucket();
+        PullRequests pullRequests = bitBucket.list(settings.getUrl(), settings.getUsername(), settings.getPassword());
+
+        return pullRequests.getValues();
+    }
+
+
 }
