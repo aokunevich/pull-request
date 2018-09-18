@@ -9,6 +9,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Main implements ProjectComponent {
 
+    private static final Logger logger = Logger.getInstance(Main.class);
+
     private List<PullRequest> pullRequests = new ArrayList<>();
 
 
@@ -33,12 +36,18 @@ public class Main implements ProjectComponent {
 
     @Override
     public void projectOpened() {
+        logger.debug("Project was opened");
+
         Executors.newScheduledThreadPool(1)
                 .scheduleAtFixedRate(this::doProcess, 5, 10, TimeUnit.SECONDS);
     }
 
     private void doProcess() {
+        logger.debug("Processing...");
+
         List<PullRequest> loadedPullRequests = loadPullRequests();
+
+        logger.debug("Pull requests were loaded: " + loadedPullRequests.size());
 
         if (pullRequests.size() != loadedPullRequests.size()) {
             pullRequests.clear();
@@ -50,17 +59,18 @@ public class Main implements ProjectComponent {
                     NotificationType.INFORMATION));
 
         }
+
+        logger.info("Changes in pull requests were found.");
     }
 
     private List<PullRequest> loadPullRequests() {
         Settings settings = new Settings();
         settings.loadState(ServiceManager.getService(project, Settings.class));
 
-
         List<PullRequest> result = new ArrayList<>();
 
         if (settings.getUrl() == null || settings.getUsername() == null || settings.getPassword() == null) {
-            System.out.println(settings);
+            logger.warn("Settings are invalid. " + settings);
         } else {
             BitBucket bitBucket = new BitBucket();
             PullRequests pullRequests = bitBucket.list(settings.getUrl(), settings.getUsername(), settings.getPassword());
