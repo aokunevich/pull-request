@@ -89,7 +89,7 @@ public class Main implements ProjectComponent {
         boolean result = new NewPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
             Notifications.Bus.notify(new Notification("Pull Request Plugin",
                             "New Pull Request Was Created",
-                            pullRequest.getAuthor() + ": " + pullRequest.getTitle(),
+                            pullRequest.getAuthor().getUser().getDisplayName() + "<br>" + pullRequest.getTitle(),
                             NotificationType.INFORMATION),
                     project);
 
