@@ -7,8 +7,12 @@
 
     <description></description>
 
-    <change-notes>
+    <change-notes><![CDATA[
+      Release 0.1: Initial release.<br>
+      Support BitBucket Server v4.12
+    ]]>
     </change-notes>
+
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="162"/>
@@ -20,23 +24,28 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="MyToolWindow" anchor="right" factoryClass="akunevich.pullrequest.HelloToolWindow"/>
+        <!--
+                <toolWindow id="MyToolWindow" anchor="right" factoryClass="akunevich.pullrequest.HelloToolWindow"/>
+        -->
 
         <projectConfigurable groupId="tools" displayName="Pull Request Plugin"
                              id="preferences.PullRequestPluginConfigurable"
                              instance="akunevich.pullrequest.settings.PullRequestConfigurable"/>
+
         <projectService serviceInterface="akunevich.pullrequest.settings.Settings"
                         serviceImplementation="akunevich.pullrequest.settings.Settings"/>
 
     </extensions>
 
-    <actions>
-        <group id="MyPlugin.SampleMenu" text="Greeting" description="Greeting menu">
-            <add-to-group group-id="MainMenu" anchor="last"/>
-            <action id="Myplugin.Textboxes" class="akunevich.pullrequest.HelloAction" text="Hello"
-                    description="Says hello"/>
-        </group>
-    </actions>
+    <!--
+        <actions>
+            <group id="MyPlugin.SampleMenu" text="Greeting" description="Greeting menu">
+                <add-to-group group-id="MainMenu" anchor="last"/>
+                <action id="Myplugin.Textboxes" class="akunevich.pullrequest.HelloAction" text="Hello"
+                        description="Says hello"/>
+            </group>
+        </actions>
+    -->
 
     <project-components>
         <component>
