@@ -1,5 +1,6 @@
 package akunevich.pullrequest;
 
+import akunevich.pullrequest.detector.NewPullRequestDetector;
 import akunevich.pullrequest.integration.bitbucket.BitBucket;
 import akunevich.pullrequest.integration.bitbucket.PullRequest;
 import akunevich.pullrequest.integration.bitbucket.PullRequests;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 
 // todo add 'enabled' to settings
@@ -49,16 +51,30 @@ public class Main implements ProjectComponent {
 
         logger.debug("Pull requests were loaded: " + loadedPullRequests.size());
 
-        if (pullRequests.size() != loadedPullRequests.size()) {
+
+        boolean result = new NewPullRequestDetector().detect(pullRequests, loadedPullRequests, new Function<PullRequest, Void>() {
+
+            @Override
+            public Void apply(PullRequest pullRequest) {
+
+                Notifications.Bus.notify(new Notification("Pull Request Plugin",
+                                "New Pull Request Was Created",
+                                pullRequest.getAuthor() + ": " + pullRequest.getTitle(),
+                                NotificationType.INFORMATION),
+                        project);
+
+                logger.info("Project: " + project.getName() +
+                        ". New pull request found." +
+                        pullRequest.getId() + " " + pullRequest.getAuthor() + " " + pullRequest.getTitle());
+
+                return null;
+            }
+        });
+
+        if (result) {
             pullRequests.clear();
             pullRequests.addAll(loadedPullRequests);
 
-            Notifications.Bus.notify(new Notification("Pull Request Plugin",
-                    "New pull request was created",
-                    "",
-                    NotificationType.INFORMATION), project);
-
-            logger.info("Project: " + project.getName() + ". Changes in pull requests were found.");
         }
 
     }
