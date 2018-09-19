@@ -1,5 +1,8 @@
 package akunevich.pullrequest.settings;
 
+import akunevich.pullrequest.event.EventBusFactory;
+import akunevich.pullrequest.event.PluginDisabledEvent;
+import akunevich.pullrequest.event.PluginEnabledEvent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
@@ -51,12 +54,18 @@ public class PullRequestConfigurable implements Configurable {
 
     @Override
     public void apply() {
-        settingsForm.apply();
+        settings = settingsForm.apply();
+
+        if (settings.isEnabled()) {
+            EventBusFactory.INSTANCE.eventBus().post(new PluginEnabledEvent());
+        } else {
+            EventBusFactory.INSTANCE.eventBus().post(new PluginDisabledEvent());
+        }
     }
 
     @Override
     public void reset() {
-        settingsForm.reset();
+        settings = settingsForm.reset();
     }
 
     @Override

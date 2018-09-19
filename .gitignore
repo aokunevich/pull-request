@@ -28,6 +28,8 @@ temp/
 target/
 *.iml
 /.idea/
+.idea/
+.idea/*
 **/webapp/VAADIN/themes/mytheme/styles.css
 /storage/
 

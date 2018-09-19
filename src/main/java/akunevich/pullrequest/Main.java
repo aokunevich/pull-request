@@ -1,10 +1,14 @@
 package akunevich.pullrequest;
 
 import akunevich.pullrequest.detector.NewPullRequestDetector;
+import akunevich.pullrequest.event.EventBusFactory;
+import akunevich.pullrequest.event.PluginDisabledEvent;
+import akunevich.pullrequest.event.PluginEnabledEvent;
 import akunevich.pullrequest.integration.bitbucket.BitBucket;
 import akunevich.pullrequest.integration.bitbucket.PullRequest;
 import akunevich.pullrequest.integration.bitbucket.PullRequests;
 import akunevich.pullrequest.settings.Settings;
+import com.google.common.eventbus.Subscribe;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -16,32 +20,62 @@ import com.intellij.openapi.project.Project;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-
-
-// todo add 'enabled' to settings
-
 
 public class Main implements ProjectComponent {
 
     private static final Logger logger = Logger.getInstance(Main.class);
 
     private List<PullRequest> pullRequests = new ArrayList<>();
-
-
     private Project project;
+    private Settings settings = new Settings();
+    private ScheduledExecutorService executorService;
 
     public Main(Project project) {
         this.project = project;
+
+        settings.loadState(ServiceManager.getService(project, Settings.class));
+
+        EventBusFactory.INSTANCE.eventBus().register(this);
+    }
+
+    @Subscribe
+    public void pluginEnabled(PluginEnabledEvent pluginEnabledEvent) {
+        startPlugin();
+    }
+
+    @Subscribe
+    public void pluginDisabled(PluginDisabledEvent pluginDisabledEvent) {
+        stopPlugin();
+    }
+
+    private void stopPlugin() {
+        logger.info("Stop plugin");
+
+        if (executorService != null && !executorService.isTerminated()) {
+            executorService.shutdown();
+        }
+    }
+
+    private void startPlugin() {
+        logger.info("Start plugin");
+
+        if (executorService == null || executorService.isTerminated()) {
+            executorService = Executors.newScheduledThreadPool(1);
+        }
+        executorService.scheduleAtFixedRate(this::doProcess, 5, 10, TimeUnit.SECONDS);
     }
 
     @Override
     public void projectOpened() {
         logger.debug("Project was opened");
 
-        Executors.newScheduledThreadPool(1)
-                .scheduleAtFixedRate(this::doProcess, 5, 10, TimeUnit.SECONDS);
+        if (settings != null && settings.isEnabled()) {
+            startPlugin();
+        } else {
+            stopPlugin();
+        }
     }
 
     private void doProcess() {
@@ -52,36 +86,28 @@ public class Main implements ProjectComponent {
         logger.debug("Pull requests were loaded: " + loadedPullRequests.size());
 
 
-        boolean result = new NewPullRequestDetector().detect(pullRequests, loadedPullRequests, new Function<PullRequest, Void>() {
+        boolean result = new NewPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
+            Notifications.Bus.notify(new Notification("Pull Request Plugin",
+                            "New Pull Request Was Created",
+                            pullRequest.getAuthor() + ": " + pullRequest.getTitle(),
+                            NotificationType.INFORMATION),
+                    project);
 
-            @Override
-            public Void apply(PullRequest pullRequest) {
+            logger.info("Project: " + project.getName() +
+                    ". New pull request found." +
+                    pullRequest.getId() + " " + pullRequest.getAuthor() + " " + pullRequest.getTitle());
 
-                Notifications.Bus.notify(new Notification("Pull Request Plugin",
-                                "New Pull Request Was Created",
-                                pullRequest.getAuthor() + ": " + pullRequest.getTitle(),
-                                NotificationType.INFORMATION),
-                        project);
-
-                logger.info("Project: " + project.getName() +
-                        ". New pull request found." +
-                        pullRequest.getId() + " " + pullRequest.getAuthor() + " " + pullRequest.getTitle());
-
-                return null;
-            }
+            return null;
         });
 
         if (result) {
             pullRequests.clear();
             pullRequests.addAll(loadedPullRequests);
-
         }
 
     }
 
     private List<PullRequest> loadPullRequests() {
-        Settings settings = new Settings();
-        settings.loadState(ServiceManager.getService(project, Settings.class));
 
         List<PullRequest> result = new ArrayList<>();
 
@@ -94,6 +120,5 @@ public class Main implements ProjectComponent {
         }
         return result;
     }
-
 
 }
