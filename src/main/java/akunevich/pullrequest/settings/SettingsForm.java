@@ -30,7 +30,7 @@ public class SettingsForm {
     }
 
     public Settings apply() {
-        settings.setUsername(url.getText());
+        settings.setUrl(url.getText());
         settings.setEnabled(enabled.isSelected());
         settings.setProject(project.getText());
         settings.setRepository(repository.getText());
