@@ -1,13 +1,13 @@
 package akunevich.pullrequest.integration.bitbucket;
 
 public class PullRequestLinks {
-    private PullRequestLinkSelf links;
+    private PullRequestLinkSelf self;
 
-    public PullRequestLinkSelf getLinks() {
-        return links;
+    public PullRequestLinkSelf getSelf() {
+        return self;
     }
 
-    public void setLinks(PullRequestLinkSelf links) {
-        this.links = links;
+    public void setSelf(PullRequestLinkSelf self) {
+        this.self = self;
     }
 }
