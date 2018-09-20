@@ -10,7 +10,8 @@ import org.jetbrains.annotations.Nullable;
 public class Settings implements PersistentStateComponent<Settings> {
 
     private Boolean enabled;
-    private String url;
+    private String project;
+    private String repository;
     private String username;
     private String password;
 
@@ -26,12 +27,20 @@ public class Settings implements PersistentStateComponent<Settings> {
         return enabled == null ? Boolean.FALSE : enabled;
     }
 
-    public String getUrl() {
-        return url;
+    public String getProject() {
+        return project;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public void setRepository(String repository) {
+        this.repository = repository;
     }
 
     public String getUsername() {
@@ -64,8 +73,9 @@ public class Settings implements PersistentStateComponent<Settings> {
     @Override
     public String toString() {
         return "Settings{" +
-                "enabled='" + enabled + '\'' +
-                ", url='" + url + '\'' +
+                " enabled='" + enabled + '\'' +
+                ", project='" + project + '\'' +
+                ", repository='" + repository + '\'' +
                 ", username='" + username + '\'' +
                 '}';
     }

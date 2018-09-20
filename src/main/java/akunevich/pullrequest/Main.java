@@ -134,11 +134,16 @@ public class Main implements ProjectComponent {
 
         List<PullRequest> result = new ArrayList<>();
 
-        if (settings.getUrl() == null || settings.getUsername() == null || settings.getPassword() == null) {
+        if (settings.getProject() == null ||
+                settings.getRepository() == null ||
+                settings.getUsername() == null ||
+                settings.getPassword() == null) {
             logger.warn("Project: " + project.getName() + ". Settings are invalid. " + settings);
+            stopPlugin();
         } else {
             BitBucket bitBucket = new BitBucket();
-            PullRequests pullRequests = bitBucket.list(settings.getUrl(), settings.getUsername(), settings.getPassword());
+            PullRequests pullRequests = bitBucket.list(settings.getProject(), settings.getRepository(),
+                    settings.getUsername(), settings.getPassword());
             result.addAll(pullRequests.getValues());
         }
         return result;

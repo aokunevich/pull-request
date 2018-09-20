@@ -5,19 +5,23 @@ import com.intellij.openapi.diagnostic.Logger;
 import org.apache.http.client.fluent.Request;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Base64;
 
 public class BitBucket {
 
     private static final Logger logger = Logger.getInstance(BitBucket.class);
 
-    public PullRequests list(String url, String username, String password) {
+    private static final String URL_LIST = "/rest/api/1.0/projects/{0}/repos/{1}/pull-requests";
+
+    public PullRequests list(String project, String repository, String username, String password) {
         PullRequests result = new PullRequests();
 
+        String url = MessageFormat.format(URL_LIST, project, repository);
         try {
             result = new Gson().fromJson(doList(url, username, password), PullRequests.class);
         } catch (IOException e) {
-            logger.error(e);
+            logger.error("Can't load list of pull requests from url: " + url, e);
         }
 
         return result;
