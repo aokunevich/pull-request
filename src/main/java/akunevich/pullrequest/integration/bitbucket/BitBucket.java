@@ -17,9 +17,14 @@ public class BitBucket {
     public PullRequests list(String url, String project, String repository, String username, String password) {
         PullRequests result = new PullRequests();
 
-        String generated = MessageFormat.format(URL_LIST, url, project, repository);
+        String correctedUrl = url;
+        if (url.endsWith("/")) {
+            correctedUrl = url.substring(0, url.lastIndexOf("/"));
+        }
+
+        String generated = MessageFormat.format(URL_LIST, correctedUrl, project, repository);
         try {
-            result = new Gson().fromJson(doList(url, username, password), PullRequests.class);
+            result = new Gson().fromJson(doList(generated, username, password), PullRequests.class);
         } catch (Exception e) {
             logger.error("Can't load list of pull requests from url: " + generated, e);
         }
