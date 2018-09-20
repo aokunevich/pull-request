@@ -11,6 +11,15 @@ public class PullRequest {
     private boolean closed;
     private PullRequestAuthor author;
     private List<PullRequestReviewer> reviewers;
+    private PullRequestLinks links;
+
+    public PullRequestLinks getLinks() {
+        return links;
+    }
+
+    public void setLinks(PullRequestLinks links) {
+        this.links = links;
+    }
 
     public List<PullRequestReviewer> getReviewers() {
         return reviewers;
