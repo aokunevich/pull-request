@@ -63,6 +63,11 @@ public class Main implements ProjectComponent {
     private void startPlugin() {
         logger.info("Start plugin");
 
+        if (settings == null && !settings.isEnabled()) {
+            stopPlugin();
+            return;
+        }
+
         if (executorService == null || executorService.isTerminated()) {
             executorService = Executors.newScheduledThreadPool(1);
         }
@@ -71,7 +76,7 @@ public class Main implements ProjectComponent {
 
     @Override
     public void projectOpened() {
-        logger.debug("Project was opened");
+        logger.debug("Project: " + project.getName() + ". Project was opened");
 
         if (settings != null && settings.isEnabled()) {
             startPlugin();
@@ -85,7 +90,7 @@ public class Main implements ProjectComponent {
 
         List<PullRequest> loadedPullRequests = loadPullRequests();
 
-        logger.debug("Pull requests were loaded: " + loadedPullRequests.size());
+        logger.debug("Project: " + project.getName() + ". Pull requests were loaded: " + loadedPullRequests.size());
 
 
         AtomicBoolean isChangesDetected = new AtomicBoolean(false);
