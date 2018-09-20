@@ -134,7 +134,8 @@ public class Main implements ProjectComponent {
 
         List<PullRequest> result = new ArrayList<>();
 
-        if (settings.getProject() == null ||
+        if (settings.getUrl() == null ||
+                settings.getProject() == null ||
                 settings.getRepository() == null ||
                 settings.getUsername() == null ||
                 settings.getPassword() == null) {
@@ -142,7 +143,7 @@ public class Main implements ProjectComponent {
             stopPlugin();
         } else {
             BitBucket bitBucket = new BitBucket();
-            PullRequests pullRequests = bitBucket.list(settings.getProject(), settings.getRepository(),
+            PullRequests pullRequests = bitBucket.list(settings.getUrl(), settings.getProject(), settings.getRepository(),
                     settings.getUsername(), settings.getPassword());
             result.addAll(pullRequests.getValues());
         }

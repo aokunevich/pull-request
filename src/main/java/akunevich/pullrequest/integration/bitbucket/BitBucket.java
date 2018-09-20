@@ -12,16 +12,16 @@ public class BitBucket {
 
     private static final Logger logger = Logger.getInstance(BitBucket.class);
 
-    private static final String URL_LIST = "/rest/api/1.0/projects/{0}/repos/{1}/pull-requests";
+    private static final String URL_LIST = "{0}/rest/api/1.0/projects/{1}/repos/{2}/pull-requests";
 
-    public PullRequests list(String project, String repository, String username, String password) {
+    public PullRequests list(String url, String project, String repository, String username, String password) {
         PullRequests result = new PullRequests();
 
-        String url = MessageFormat.format(URL_LIST, project, repository);
+        String generated = MessageFormat.format(URL_LIST, url.endsWith("/") ? url : url + "/", project, repository);
         try {
             result = new Gson().fromJson(doList(url, username, password), PullRequests.class);
         } catch (IOException e) {
-            logger.error("Can't load list of pull requests from url: " + url, e);
+            logger.error("Can't load list of pull requests from url: " + generated, e);
         }
 
         return result;
