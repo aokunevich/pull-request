@@ -86,55 +86,59 @@ public class Main implements ProjectComponent {
     }
 
     private void doProcess() {
-        logger.info("Project: " + project.getName() + ". Processing...");
+        try {
+            logger.info("Project: " + project.getName() + ". Processing...");
 
-        List<PullRequest> loadedPullRequests = loadPullRequests();
+            List<PullRequest> loadedPullRequests = loadPullRequests();
 
-        logger.debug("Project: " + project.getName() + ". Pull requests were loaded: " + loadedPullRequests.size());
-
-
-        AtomicBoolean isChangesDetected = new AtomicBoolean(false);
-
-        new NewPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
-            isChangesDetected.set(true);
-            Notifications.Bus.notify(new Notification("Pull Request Plugin: Created",
-                            "New Pull Request Was Created",
-                            pullRequest.getAuthor().getUser().getDisplayName() + "<br>" + pullRequest.getTitle(),
-                            NotificationType.INFORMATION),
-                    project);
-
-            logger.info("Project: " + project.getName() +
-                    ". New pull request found." +
-                    pullRequest.getId() + " " + pullRequest.getAuthor() + " " + pullRequest.getTitle());
-
-            return null;
-        });
-
-        new ApprovedPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
-            isChangesDetected.set(true);
-
-            Notifications.Bus.notify(new Notification("Pull Request Plugin: Approved",
-                            "Pull Request Was Approved",
-                            pullRequest.getAuthor().getUser().getDisplayName() + "<br>" + pullRequest.getTitle(),
-                            NotificationType.INFORMATION),
-                    project);
-
-            logger.info("Project: " + project.getName() +
-                    ". Approved." +
-                    pullRequest.getId() + " " + pullRequest.getAuthor() + " " + pullRequest.getTitle());
-
-            return null;
-
-        });
+            logger.debug("Project: " + project.getName() + ". Pull requests were loaded: " + loadedPullRequests.size());
 
 
-        if (isChangesDetected.get()) {
-            pullRequests.clear();
-            pullRequests.addAll(loadedPullRequests);
+            AtomicBoolean isChangesDetected = new AtomicBoolean(false);
+
+            new NewPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
+                isChangesDetected.set(true);
+                Notifications.Bus.notify(new Notification("Pull Request Plugin: Created",
+                                "New Pull Request Was Created",
+                                pullRequest.getAuthor().getUser().getDisplayName() + "<br>" + pullRequest.getTitle(),
+                                NotificationType.INFORMATION),
+                        project);
+
+                logger.info("Project: " + project.getName() +
+                        ". New pull request found." +
+                        pullRequest.getId() + " " + pullRequest.getAuthor() + " " + pullRequest.getTitle());
+
+                return null;
+            });
+
+            new ApprovedPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
+                isChangesDetected.set(true);
+
+                Notifications.Bus.notify(new Notification("Pull Request Plugin: Approved",
+                                "Pull Request Was Approved",
+                                pullRequest.getAuthor().getUser().getDisplayName() + "<br>" + pullRequest.getTitle(),
+                                NotificationType.INFORMATION),
+                        project);
+
+                logger.info("Project: " + project.getName() +
+                        ". Approved." +
+                        pullRequest.getId() + " " + pullRequest.getAuthor() + " " + pullRequest.getTitle());
+
+                return null;
+
+            });
+
+
+            if (isChangesDetected.get()) {
+                pullRequests.clear();
+                pullRequests.addAll(loadedPullRequests);
+            }
+
+
+            logger.info("Project: " + project.getName() + ". Saved pull requests: " + pullRequests.size());
+        } catch (Throwable e) {
+            logger.error(e);
         }
-
-
-        logger.info("Project: " + project.getName() + ". Saved pull requests: " + pullRequests.size());
     }
 
     private List<PullRequest> loadPullRequests() {
