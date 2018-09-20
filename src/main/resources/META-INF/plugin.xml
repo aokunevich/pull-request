@@ -5,11 +5,15 @@
     <version>0.1</version>
     <vendor email="aliaksandr.akunevich@gmail.com">Alex Akunevich</vendor>
 
-    <description></description>
+    <description><![CDATA[
+        Release 0.1: Initial release.<br>
+        Support BitBucket Server v4.12
+    ]]>
+    </description>
 
     <change-notes>
         Release 0.1: Initial release.
-      Support BitBucket Server v4.12
+        Support BitBucket Server v4.12
     </change-notes>
 
 
