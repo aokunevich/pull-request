@@ -1,8 +1,10 @@
 package akunevich.pullrequest.detector;
 
+import akunevich.pullrequest.integration.bitbucket.BitBucketUser;
 import akunevich.pullrequest.integration.bitbucket.PullRequest;
 import akunevich.pullrequest.integration.bitbucket.PullRequestBuilder;
-import akunevich.pullrequest.integration.bitbucket.PullRequestState;
+import akunevich.pullrequest.integration.bitbucket.PullRequestReviewer;
+import akunevich.pullrequest.integration.bitbucket.PullRequestReviewerStatus;
 import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,29 +17,29 @@ import java.util.stream.Stream;
 
 public class ApprovedPullRequestDetectorTest {
 
-    @DisplayName("No changes. All pull requests are OPEN")
+    @DisplayName("No changes. All pull requests are not approved")
     @Test
     public void test1() {
 
         List<PullRequest> pullRequests = Stream.of(
                 new PullRequestBuilder()
                         .withId(1)
-                        .withState(PullRequestState.OPEN)
+                        .withReviewer(new PullRequestReviewer(new BitBucketUser(1L, "", ""), PullRequestReviewerStatus.UNAPPROVED))
                         .build(),
                 new PullRequestBuilder()
                         .withId(2)
-                        .withState(PullRequestState.OPEN)
+                        .withReviewer(new PullRequestReviewer(new BitBucketUser(1L, "", ""), PullRequestReviewerStatus.UNAPPROVED))
                         .build())
                 .collect(Collectors.toList());
 
         List<PullRequest> newPullRequests = Stream.of(
                 new PullRequestBuilder()
                         .withId(1)
-                        .withState(PullRequestState.OPEN)
+                        .withReviewer(new PullRequestReviewer(new BitBucketUser(1L, "", ""), PullRequestReviewerStatus.UNAPPROVED))
                         .build(),
                 new PullRequestBuilder()
                         .withId(2)
-                        .withState(PullRequestState.OPEN)
+                        .withReviewer(new PullRequestReviewer(new BitBucketUser(1L, "", ""), PullRequestReviewerStatus.UNAPPROVED))
                         .build())
                 .collect(Collectors.toList());
 
@@ -54,29 +56,29 @@ public class ApprovedPullRequestDetectorTest {
         Assert.assertEquals(0, count.get());
     }
 
-    @DisplayName("One pull request is APPROVED")
+    @DisplayName("One pull request is approved")
     @Test
     public void test2() {
 
         List<PullRequest> pullRequests = Stream.of(
                 new PullRequestBuilder()
                         .withId(1)
-                        .withState(PullRequestState.OPEN)
+                        .withReviewer(new PullRequestReviewer(new BitBucketUser(1L, "", ""), PullRequestReviewerStatus.UNAPPROVED))
                         .build(),
                 new PullRequestBuilder()
                         .withId(2)
-                        .withState(PullRequestState.OPEN)
+                        .withReviewer(new PullRequestReviewer(new BitBucketUser(1L, "", ""), PullRequestReviewerStatus.UNAPPROVED))
                         .build())
                 .collect(Collectors.toList());
 
         List<PullRequest> newPullRequests = Stream.of(
                 new PullRequestBuilder()
                         .withId(1)
-                        .withState(PullRequestState.OPEN)
+                        .withReviewer(new PullRequestReviewer(new BitBucketUser(1L, "", ""), PullRequestReviewerStatus.UNAPPROVED))
                         .build(),
                 new PullRequestBuilder()
                         .withId(2)
-                        .withState(PullRequestState.APPROVED)
+                        .withReviewer(new PullRequestReviewer(new BitBucketUser(1L, "", ""), PullRequestReviewerStatus.APPROVED))
                         .build())
                 .collect(Collectors.toList());
 

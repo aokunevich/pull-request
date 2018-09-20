@@ -1,6 +1,6 @@
 package akunevich.pullrequest.integration.bitbucket;
 
-import java.util.List;
+import org.fest.util.Lists;
 
 public class PullRequestBuilder {
     private PullRequest pullRequest = new PullRequest();
@@ -44,8 +44,11 @@ public class PullRequestBuilder {
         return this;
     }
 
-    public PullRequestBuilder withRewei(List<PullRequestReviewer> reviewers) {
-        pullRequest.setReviewers(reviewers);
+    public PullRequestBuilder withReviewer(PullRequestReviewer reviewer) {
+        if (pullRequest.getReviewers() == null) {
+            pullRequest.setReviewers(Lists.newArrayList());
+        }
+        pullRequest.getReviewers().add(reviewer);
         return this;
     }
 }

@@ -4,6 +4,14 @@ public class PullRequestReviewer {
     private BitBucketUser user;
     private PullRequestReviewerStatus status;
 
+    public PullRequestReviewer() {
+    }
+
+    public PullRequestReviewer(BitBucketUser user, PullRequestReviewerStatus status) {
+        this.user = user;
+        this.status = status;
+    }
+
     public PullRequestReviewerStatus getStatus() {
         return status;
     }
