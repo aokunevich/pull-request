@@ -81,7 +81,7 @@ public class Main implements ProjectComponent {
     }
 
     private void doProcess() {
-        logger.debug("Processing...");
+        logger.info("Project: " + project.getName() + ". Processing...");
 
         List<PullRequest> loadedPullRequests = loadPullRequests();
 
@@ -128,6 +128,8 @@ public class Main implements ProjectComponent {
             pullRequests.addAll(loadedPullRequests);
         }
 
+
+        logger.info("Project: " + project.getName() + ". Saved pull requests: " + pullRequests.size());
     }
 
     private List<PullRequest> loadPullRequests() {
