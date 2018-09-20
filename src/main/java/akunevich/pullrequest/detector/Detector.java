@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public interface Detector {
-    boolean detect(List<PullRequest> pullRequests,
-                   List<PullRequest> newPullRequests,
-                   Function<PullRequest, Void> function);
+    void detect(List<PullRequest> pullRequests,
+                List<PullRequest> newPullRequests,
+                Function<PullRequest, Void> function);
 }

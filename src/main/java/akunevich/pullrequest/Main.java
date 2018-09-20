@@ -1,5 +1,6 @@
 package akunevich.pullrequest;
 
+import akunevich.pullrequest.detector.ApprovedPullRequestDetector;
 import akunevich.pullrequest.detector.NewPullRequestDetector;
 import akunevich.pullrequest.event.EventBusFactory;
 import akunevich.pullrequest.event.PluginDisabledEvent;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main implements ProjectComponent {
 
@@ -86,8 +88,11 @@ public class Main implements ProjectComponent {
         logger.debug("Pull requests were loaded: " + loadedPullRequests.size());
 
 
-        boolean result = new NewPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
-            Notifications.Bus.notify(new Notification("Pull Request Plugin",
+        AtomicBoolean isChangesDetected = new AtomicBoolean(false);
+
+        new NewPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
+            isChangesDetected.set(true);
+            Notifications.Bus.notify(new Notification("Pull Request Plugin: Created",
                             "New Pull Request Was Created",
                             pullRequest.getAuthor().getUser().getDisplayName() + "<br>" + pullRequest.getTitle(),
                             NotificationType.INFORMATION),
@@ -100,7 +105,25 @@ public class Main implements ProjectComponent {
             return null;
         });
 
-        if (result) {
+        new ApprovedPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
+            isChangesDetected.set(true);
+
+            Notifications.Bus.notify(new Notification("Pull Request Plugin: Approved",
+                            "Pull Request Was Approved",
+                            pullRequest.getAuthor().getUser().getDisplayName() + "<br>" + pullRequest.getTitle(),
+                            NotificationType.INFORMATION),
+                    project);
+
+            logger.info("Project: " + project.getName() +
+                    ". Approved." +
+                    pullRequest.getId() + " " + pullRequest.getAuthor() + " " + pullRequest.getTitle());
+
+            return null;
+
+        });
+
+
+        if (isChangesDetected.get()) {
             pullRequests.clear();
             pullRequests.addAll(loadedPullRequests);
         }

@@ -30,7 +30,7 @@ public class NewPullRequestDetectorTest {
 
         AtomicInteger count = new AtomicInteger(0);
 
-        boolean result = new NewPullRequestDetector().detect(pullRequests, newPullRequests, new Function<PullRequest, Void>() {
+        new NewPullRequestDetector().detect(pullRequests, newPullRequests, new Function<PullRequest, Void>() {
             @Override
             public Void apply(PullRequest pullRequest) {
                 count.incrementAndGet();
@@ -38,7 +38,6 @@ public class NewPullRequestDetectorTest {
             }
         });
 
-        Assert.assertFalse(result);
         Assert.assertEquals(0, count.get());
     }
 
@@ -59,7 +58,7 @@ public class NewPullRequestDetectorTest {
 
         AtomicInteger count = new AtomicInteger(0);
 
-        boolean result = new NewPullRequestDetector().detect(pullRequests, newPullRequests, new Function<PullRequest, Void>() {
+        new NewPullRequestDetector().detect(pullRequests, newPullRequests, new Function<PullRequest, Void>() {
             @Override
             public Void apply(PullRequest pullRequest) {
                 count.incrementAndGet();
@@ -67,7 +66,7 @@ public class NewPullRequestDetectorTest {
             }
         });
 
-        Assert.assertTrue(result);
+
         Assert.assertEquals(1, count.get());
     }
 
@@ -86,7 +85,7 @@ public class NewPullRequestDetectorTest {
 
         AtomicInteger count = new AtomicInteger(0);
 
-        boolean result = new NewPullRequestDetector().detect(pullRequests, newPullRequests, new Function<PullRequest, Void>() {
+        new NewPullRequestDetector().detect(pullRequests, newPullRequests, new Function<PullRequest, Void>() {
             @Override
             public Void apply(PullRequest pullRequest) {
                 count.incrementAndGet();
@@ -94,7 +93,6 @@ public class NewPullRequestDetectorTest {
             }
         });
 
-        Assert.assertFalse(result);
         Assert.assertEquals(0, count.get());
     }
 }
