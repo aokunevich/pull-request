@@ -63,7 +63,7 @@ public class Main implements ProjectComponent {
     private void startPlugin() {
         logger.info("Start plugin");
 
-        if (settings == null && !settings.isEnabled()) {
+        if (settings == null || !settings.isEnabled()) {
             stopPlugin();
             return;
         }
