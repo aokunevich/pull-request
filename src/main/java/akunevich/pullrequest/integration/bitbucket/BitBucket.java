@@ -20,7 +20,7 @@ public class BitBucket {
         String generated = MessageFormat.format(URL_LIST, url.endsWith("/") ? url : url + "/", project, repository);
         try {
             result = new Gson().fromJson(doList(url, username, password), PullRequests.class);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("Can't load list of pull requests from url: " + generated, e);
         }
 
