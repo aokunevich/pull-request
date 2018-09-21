@@ -98,9 +98,14 @@ public class Main implements ProjectComponent {
 
             new NewPullRequestDetector().detect(pullRequests, loadedPullRequests, pullRequest -> {
                 isChangesDetected.set(true);
+
                 Notifications.Bus.notify(new Notification("Pull Request Plugin: Created",
                                 "New Pull Request Was Created",
-                                pullRequest.getAuthor().getUser().getDisplayName() + "<br>" + pullRequest.getTitle(),
+                                pullRequest.getAuthor().getUser().getDisplayName() +
+                                        "<br>" +
+                                        pullRequest.getTitle() +
+                                        "<br>" +
+                                        "<a href=\"" + pullRequest.getLinks().getSelf().iterator().next().getHref() + "\">link</a>",
                                 NotificationType.INFORMATION),
                         project);
 
@@ -116,7 +121,11 @@ public class Main implements ProjectComponent {
 
                 Notifications.Bus.notify(new Notification("Pull Request Plugin: Approved",
                                 "Pull Request Was Approved",
-                                pullRequest.getAuthor().getUser().getDisplayName() + "<br>" + pullRequest.getTitle(),
+                                pullRequest.getAuthor().getUser().getDisplayName() +
+                                        "<br>" +
+                                        pullRequest.getTitle() +
+                                        "<br>" +
+                                        "<a href=\"" + pullRequest.getLinks().getSelf().iterator().next().getHref() + "\">link</a>",
                                 NotificationType.INFORMATION),
                         project);
 

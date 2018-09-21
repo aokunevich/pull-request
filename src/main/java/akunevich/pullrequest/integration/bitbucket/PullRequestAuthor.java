@@ -11,4 +11,12 @@ public class PullRequestAuthor {
     public void setUser(BitBucketUser user) {
         this.user = user;
     }
+
+
+    @Override
+    public String toString() {
+        return "PullRequestAuthor{" +
+                "user=" + user +
+                '}';
+    }
 }

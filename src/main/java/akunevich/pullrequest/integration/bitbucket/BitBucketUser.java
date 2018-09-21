@@ -37,4 +37,13 @@ public class BitBucketUser {
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
+
+    @Override
+    public String toString() {
+        return "BitBucketUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                '}';
+    }
 }
