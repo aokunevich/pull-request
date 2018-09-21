@@ -129,7 +129,7 @@ public class Main implements ProjectComponent {
             });
 
 
-            if (isChangesDetected.get()) {
+            if (isChangesDetected.get() || loadedPullRequests.size() != pullRequests.size()) {
                 pullRequests.clear();
                 pullRequests.addAll(loadedPullRequests);
             }
