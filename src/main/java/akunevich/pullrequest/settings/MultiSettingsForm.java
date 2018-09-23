@@ -104,8 +104,9 @@ public class MultiSettingsForm {
 
 
         DefaultTableModel defaultTableModel = new DefaultTableModel(data, columnNames);
-
         savedSettingsTable.setModel(defaultTableModel);
+
+
         return columnNames;
     }
 

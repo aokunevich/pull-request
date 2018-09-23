@@ -16,9 +16,6 @@ public class PullRequestConfigurable implements Configurable {
 
     public PullRequestConfigurable(Project project) {
         multiSettings = ServiceManager.getService(project, MultiSettings.class);
-        if (multiSettings == null) {
-            multiSettings = new MultiSettings();
-        }
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
