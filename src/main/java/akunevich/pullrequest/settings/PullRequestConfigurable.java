@@ -1,8 +1,5 @@
 package akunevich.pullrequest.settings;
 
-import akunevich.pullrequest.event.EventBusFactory;
-import akunevich.pullrequest.event.PluginDisabledEvent;
-import akunevich.pullrequest.event.PluginEnabledEvent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
@@ -14,12 +11,14 @@ import javax.swing.*;
 public class PullRequestConfigurable implements Configurable {
 
 
-    private MultiSettingsForm settingsForm;
-    private Settings settings;
-
+    private MultiSettings multiSettings;
+    private MultiSettingsForm multiSettingsForm;
 
     public PullRequestConfigurable(Project project) {
-        settings = ServiceManager.getService(project, Settings.class);
+        multiSettings = ServiceManager.getService(project, MultiSettings.class);
+        if (multiSettings == null) {
+            multiSettings = new MultiSettings();
+        }
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -37,11 +36,11 @@ public class PullRequestConfigurable implements Configurable {
     @Nullable
     @Override
     public JComponent createComponent() {
-        settingsForm = new MultiSettingsForm();
-        settings.loadState(settings);
+        multiSettingsForm = new MultiSettingsForm();
+        multiSettings.loadState(multiSettings);
 
-        //  settingsForm.create(settings);
-        return settingsForm.getPanel();
+        multiSettingsForm.create(multiSettings);
+        return multiSettingsForm.getPanel();
     }
 
     @Override
@@ -51,22 +50,24 @@ public class PullRequestConfigurable implements Configurable {
 
     @Override
     public void apply() {
-        settings = settingsForm.apply();
+        multiSettings = multiSettingsForm.apply();
 
+/*
         if (settings.isEnabled()) {
             EventBusFactory.INSTANCE.eventBus().post(new PluginEnabledEvent());
         } else {
             EventBusFactory.INSTANCE.eventBus().post(new PluginDisabledEvent());
         }
+*/
     }
 
     @Override
     public void reset() {
-        settings = settingsForm.reset();
+        multiSettings = multiSettingsForm.reset();
     }
 
     @Override
     public void disposeUIResources() {
-        settingsForm = null;
+        multiSettings = null;
     }
 }

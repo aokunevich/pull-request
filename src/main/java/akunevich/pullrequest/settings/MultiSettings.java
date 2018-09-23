@@ -24,10 +24,17 @@
 
 package akunevich.pullrequest.settings;
 
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.State;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiSettings {
+@State(name = "PullRequestSettings")
+public class MultiSettings implements PersistentStateComponent<MultiSettings> {
+
     private List<Settings> settings = new ArrayList<Settings>() {{
         add(new Settings("1", true, "11", "111", "1111", "111111", "xxxx"));
         add(new Settings("2", false, "11", "111", "1111", "111111", "xxxx"));
@@ -40,4 +47,17 @@ public class MultiSettings {
     public void setSettings(List<Settings> settings) {
         this.settings = settings;
     }
+
+    @Nullable
+    @Override
+    public MultiSettings getState() {
+        return this;
+    }
+
+    @Override
+    public void loadState(@NotNull MultiSettings state) {
+        // XmlSerializerUtil.copyBean(state, this);
+        state.setSettings(settings);
+    }
+
 }

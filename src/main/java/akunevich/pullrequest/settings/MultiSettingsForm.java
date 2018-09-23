@@ -30,11 +30,7 @@ public class MultiSettingsForm {
         $$$setupUI$$$();
     }
 
-    public Settings apply() {
-        return null;
-    }
-
-    public Settings reset() {
+    public MultiSettings apply() {
         return null;
     }
 
@@ -42,24 +38,27 @@ public class MultiSettingsForm {
         return panel;
     }
 
+    public MultiSettings reset() {
+        return null;
+    }
+
     public void create(MultiSettings settings) {
 
         String[] columnNames = {"Name", "Enabled", "URL", "Project", "Repository", "Username", ""};
 
-        Object[][] data = {};
-
         List<Settings> savedSettings = settings.getSettings();
-        for (int i = 0; i < savedSettings.size(); i++) {
-            Settings savedSettingsItem = savedSettings.get(i);
-            data[i] = new Object[]{
-                    savedSettingsItem.getName(),
-                    savedSettingsItem.getEnabled(),
-                    savedSettingsItem.getUrl(),
-                    savedSettingsItem.getProject(),
-                    savedSettingsItem.getRepository(),
-                    savedSettingsItem.getUsername()
-            };
-        }
+
+
+        Object[][] data = savedSettings.stream().map(savedSettingsItem ->
+                new Object[]{
+                        savedSettingsItem.getName(),
+                        savedSettingsItem.getEnabled(),
+                        savedSettingsItem.getUrl(),
+                        savedSettingsItem.getProject(),
+                        savedSettingsItem.getRepository(),
+                        savedSettingsItem.getUsername(),
+                        "delete"
+                }).toArray(Object[][]::new);
 
 
         DefaultTableModel defaultTableModel = new DefaultTableModel(data, columnNames);
@@ -74,7 +73,7 @@ public class MultiSettingsForm {
             }
         };
 
-        ButtonColumn buttonColumn = new ButtonColumn(savedSettingsTable, delete, columnNames.length + 1);
+        ButtonColumn buttonColumn = new ButtonColumn(savedSettingsTable, delete, columnNames.length - 1);
         buttonColumn.setMnemonic(KeyEvent.VK_D);
 
 
