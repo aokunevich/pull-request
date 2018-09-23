@@ -22,7 +22,6 @@ public class SettingsForm {
         this.settings = settings;
 
         url.setText(settings.getUrl());
-        enabled.setSelected(settings.getEnabled());
         project.setText(settings.getProject());
         repository.setText(settings.getRepository());
         username.setText(settings.getUsername());
@@ -31,7 +30,6 @@ public class SettingsForm {
 
     public Settings apply() {
         settings.setUrl(url.getText());
-        settings.setEnabled(enabled.isSelected());
         settings.setProject(project.getText());
         settings.setRepository(repository.getText());
         settings.setUsername(username.getText());
@@ -41,7 +39,6 @@ public class SettingsForm {
 
     public Settings reset() {
         url.setText(settings.getUrl());
-        enabled.setSelected(settings.getEnabled());
         project.setText(settings.getProject());
         repository.setText(settings.getRepository());
         username.setText(settings.getUsername());

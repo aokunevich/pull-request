@@ -1,17 +1,9 @@
 package akunevich.pullrequest.settings;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.util.xmlb.XmlSerializerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-@State(name = "PullRequestSettings")
-public class Settings implements PersistentStateComponent<Settings> {
+public class Settings {
 
     private String name;
     private String url;
-    private Boolean enabled;
     private String project;
     private String repository;
     private String username;
@@ -22,10 +14,9 @@ public class Settings implements PersistentStateComponent<Settings> {
     }
 
 
-    public Settings(String name, Boolean enabled, String url, String project, String repository, String username, String password) {
+    public Settings(String name, String url, String project, String repository, String username, String password) {
         this.name = name;
         this.url = url;
-        this.enabled = enabled;
         this.project = project;
         this.repository = repository;
         this.username = username;
@@ -46,18 +37,6 @@ public class Settings implements PersistentStateComponent<Settings> {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public Boolean getEnabled() {
-        return enabled == null ? Boolean.FALSE : enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public Boolean isEnabled() {
-        return enabled == null ? Boolean.FALSE : enabled;
     }
 
     public String getProject() {
@@ -92,22 +71,10 @@ public class Settings implements PersistentStateComponent<Settings> {
         this.password = password;
     }
 
-    @Nullable
-    @Override
-    public Settings getState() {
-        return this;
-    }
-
-    @Override
-    public void loadState(@NotNull Settings state) {
-        XmlSerializerUtil.copyBean(state, this);
-    }
-
     @Override
     public String toString() {
         return "Settings{" +
                 " name='" + name + '\'' +
-                ", enabled='" + enabled + '\'' +
                 ", url='" + url + '\'' +
                 ", project='" + project + '\'' +
                 ", repository='" + repository + '\'' +

@@ -7,8 +7,7 @@ import akunevich.pullrequest.event.PluginDisabledEvent;
 import akunevich.pullrequest.event.PluginEnabledEvent;
 import akunevich.pullrequest.integration.bitbucket.BitBucket;
 import akunevich.pullrequest.integration.bitbucket.PullRequest;
-import akunevich.pullrequest.integration.bitbucket.PullRequests;
-import akunevich.pullrequest.settings.Settings;
+import akunevich.pullrequest.settings.MultiSettings;
 import com.google.common.eventbus.Subscribe;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
@@ -31,13 +30,16 @@ public class Main implements ProjectComponent {
 
     private List<PullRequest> pullRequests = new ArrayList<>();
     private Project project;
-    private Settings settings = new Settings();
+    private MultiSettings settings = new MultiSettings();
     private ScheduledExecutorService executorService;
 
     public Main(Project project) {
         this.project = project;
 
-        settings.loadState(ServiceManager.getService(project, Settings.class));
+        MultiSettings multiSettings = ServiceManager.getService(project, MultiSettings.class);
+        if (multiSettings != null) {
+            settings.loadState(multiSettings);
+        }
 
         EventBusFactory.INSTANCE.eventBus().register(this);
     }
@@ -154,18 +156,15 @@ public class Main implements ProjectComponent {
 
         List<PullRequest> result = new ArrayList<>();
 
-        if (settings.getUrl() == null ||
-                settings.getProject() == null ||
-                settings.getRepository() == null ||
-                settings.getUsername() == null ||
-                settings.getPassword() == null) {
+        if (settings == null || settings.getSettings() == null) {
             logger.warn("Project: " + project.getName() + ". Settings are invalid. " + settings);
             stopPlugin();
         } else {
             BitBucket bitBucket = new BitBucket();
-            PullRequests pullRequests = bitBucket.list(settings.getUrl(), settings.getProject(), settings.getRepository(),
+ /*           PullRequests pullRequests = bitBucket.list(settings.getUrl(), settings.getProject(), settings.getRepository(),
                     settings.getUsername(), settings.getPassword());
             result.addAll(pullRequests.getValues());
+ */
         }
         return result;
     }

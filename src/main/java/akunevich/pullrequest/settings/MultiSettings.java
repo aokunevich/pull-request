@@ -26,19 +26,19 @@ package akunevich.pullrequest.settings;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
+import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@State(name = "PullRequestSettings")
+@State(name = "PullRequestMultiSettings")
 public class MultiSettings implements PersistentStateComponent<MultiSettings> {
 
-    private List<Settings> settings = new ArrayList<Settings>() {{
-        add(new Settings("1", true, "11", "111", "1111", "111111", "xxxx"));
-        add(new Settings("2", false, "11", "111", "1111", "111111", "xxxx"));
-    }};
+    private Boolean enabled = Boolean.FALSE;
+
+    private List<Settings> settings = new ArrayList<>();
 
     public List<Settings> getSettings() {
         return settings;
@@ -46,6 +46,18 @@ public class MultiSettings implements PersistentStateComponent<MultiSettings> {
 
     public void setSettings(List<Settings> settings) {
         this.settings = settings;
+    }
+
+    public Boolean getEnabled() {
+        return enabled == null ? Boolean.FALSE : enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Boolean isEnabled() {
+        return enabled == null ? Boolean.FALSE : enabled;
     }
 
     @Nullable
@@ -56,8 +68,7 @@ public class MultiSettings implements PersistentStateComponent<MultiSettings> {
 
     @Override
     public void loadState(@NotNull MultiSettings state) {
-        // XmlSerializerUtil.copyBean(state, this);
-        state.setSettings(settings);
+        XmlSerializerUtil.copyBean(state, this);
     }
 
 }

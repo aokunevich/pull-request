@@ -36,8 +36,8 @@
                              id="preferences.PullRequestPluginConfigurable"
                              instance="akunevich.pullrequest.settings.PullRequestConfigurable"/>
 
-        <projectService serviceInterface="akunevich.pullrequest.settings.Settings"
-                        serviceImplementation="akunevich.pullrequest.settings.Settings"/>
+        <projectService serviceInterface="akunevich.pullrequest.settings.MultiSettings"
+                        serviceImplementation="akunevich.pullrequest.settings.MultiSettings"/>
 
     </extensions>
 
