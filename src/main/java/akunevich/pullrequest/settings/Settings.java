@@ -9,12 +9,22 @@ import org.jetbrains.annotations.Nullable;
 @State(name = "PullRequestSettings")
 public class Settings implements PersistentStateComponent<Settings> {
 
+    private String name;
     private String url;
     private Boolean enabled;
     private String project;
     private String repository;
     private String username;
     private String password;
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getUrl() {
         return url;
@@ -82,7 +92,8 @@ public class Settings implements PersistentStateComponent<Settings> {
     @Override
     public String toString() {
         return "Settings{" +
-                " enabled='" + enabled + '\'' +
+                " name='" + name + '\'' +
+                ", enabled='" + enabled + '\'' +
                 ", url='" + url + '\'' +
                 ", project='" + project + '\'' +
                 ", repository='" + repository + '\'' +

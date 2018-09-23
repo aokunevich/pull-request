@@ -14,7 +14,7 @@ import javax.swing.*;
 public class PullRequestConfigurable implements Configurable {
 
 
-    private SettingsForm settingsForm;
+    private MultiSettingsForm settingsForm;
     private Settings settings;
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -40,7 +40,7 @@ public class PullRequestConfigurable implements Configurable {
     @Nullable
     @Override
     public JComponent createComponent() {
-        settingsForm = new SettingsForm();
+        settingsForm = new MultiSettingsForm();
         settings.loadState(settings);
 
         settingsForm.create(settings);
