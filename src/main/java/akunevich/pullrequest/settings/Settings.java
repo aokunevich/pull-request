@@ -18,6 +18,20 @@ public class Settings implements PersistentStateComponent<Settings> {
     private String password;
 
 
+    public Settings() {
+    }
+
+
+    public Settings(String name, Boolean enabled, String url, String project, String repository, String username, String password) {
+        this.name = name;
+        this.url = url;
+        this.enabled = enabled;
+        this.project = project;
+        this.repository = repository;
+        this.username = username;
+        this.password = password;
+    }
+
     public String getName() {
         return name;
     }

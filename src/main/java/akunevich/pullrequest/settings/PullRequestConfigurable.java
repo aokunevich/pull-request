@@ -17,11 +17,8 @@ public class PullRequestConfigurable implements Configurable {
     private MultiSettingsForm settingsForm;
     private Settings settings;
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private Project project;
 
     public PullRequestConfigurable(Project project) {
-        this.project = project;
         settings = ServiceManager.getService(project, Settings.class);
     }
 
@@ -43,7 +40,7 @@ public class PullRequestConfigurable implements Configurable {
         settingsForm = new MultiSettingsForm();
         settings.loadState(settings);
 
-        settingsForm.create(settings);
+        //  settingsForm.create(settings);
         return settingsForm.getPanel();
     }
 
